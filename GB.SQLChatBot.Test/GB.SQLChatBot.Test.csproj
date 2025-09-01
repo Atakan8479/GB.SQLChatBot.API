@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Moq.EntityFrameworkCore" Version="6.0.0.6" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.1.2">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GB.SQLChatBot.API\GB.SQLChatBot.API.csproj" />
+		<ProjectReference Include="..\GB.SQLChatBot.Business\GB.SQLChatBot.Business.csproj" />
+		<ProjectReference Include="..\GB.SQLChatBot.Data\GB.SQLChatBot.Data.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Integration\Scenarios\Products\Scenario_1\input.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Integration\Scenarios\Products\Scenario_1\output.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

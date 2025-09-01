@@ -1,0 +1,34 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+namespace: "gbsqlchatbot-prod"
+
+replicaCount: 2
+
+image:
+  tag: <TagPlaceholder>
+
+envVars: 
+  - name: ASPNETCORE_ENVIRONMENT
+    value: prod
+  - name: ServiceHost
+    value: gbsqlchatbot.prod.lcwaikiki.com
+
+autoscaling:
+  enabled: true
+  targetCPUUtilizationPercentage: 70
+  minReplicas: 2
+  maxReplicas: 4
+
+istio:
+  enabled: true
+  namespace: gb-shared
+  virtualService:
+    gateways: 
+    - gbgateway
+    hosts:
+    - gbsqlchatbot.prod.lcwaikiki.com
+    http:
+      matchUriPrefix: /gb/sqlchatbot/
+      route: 
+        - destination:
+            host: gb-sqlchatbot-service.gbsqlchatbot-prod.svc.cluster.local

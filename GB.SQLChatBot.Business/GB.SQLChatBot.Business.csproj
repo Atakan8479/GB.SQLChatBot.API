@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+    <ProjectGuid>{9B0B374B-4417-4CC2-BC3F-9669A601331B}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Persistent\**" />
+    <EmbeddedResource Remove="Persistent\**" />
+    <None Remove="Persistent\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
+    <PackageReference Include="Azure.Core" Version="1.47.1" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GB.SQLChatBot.Core\GB.SQLChatBot.Core.csproj" />
+    <ProjectReference Include="..\GB.SQLChatBot.Data\GB.SQLChatBot.Data.csproj" />
+  </ItemGroup>
+
+</Project>

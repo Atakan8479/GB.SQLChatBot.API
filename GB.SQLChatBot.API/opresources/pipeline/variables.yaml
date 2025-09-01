@@ -1,0 +1,49 @@
+variables:
+- name: apim.apiId
+  value: 'gb-sqlchatbot-service-api'
+- name: apim.apiDescription
+  value: 'GB SQLChatBot Service API'
+- name: apim.apiDisplayName
+  value: 'GB SQLChatBot Service API'
+- name: apim.apiFormat
+  value: OpenApiJson
+- name: apim.apiPath
+  value: gb/sqlchatbot
+- name: apim.apiProductId
+  value: gbsqlchatbot
+- name: project.folder
+  value:  GB.SQLChatBot.API
+- name: project.teamName
+  value: gb
+- name: project.serviceName
+  value: gb-sqlchatbot-service
+- name: project.sonarqubeEndpoint
+  value: ''
+- name: project.sonarqubeProjectKey
+  value: ''
+- name: NODE_EXTRA_CA_CERTS
+  value: '/opt/sonarqube/sonarqube.pem'
+- ${{ if eq(variables['build.SourceBranchName'], 'master') }}:
+  - group: hq-pipeline-prod
+  - name: apim.backendServiceUrl
+    value: 'http://gb-sqlchatbot-service.gbsqlchatbot-prod.svc.cluster.local'
+  - name: project.namespace
+    value: gbsqlchatbot-prod
+  - name: runKondukto
+    value: false
+- ${{ if eq(variables['build.SourceBranchName'], 'test') }}:
+  - group: hq-pipeline-test
+  - name: apim.backendServiceUrl
+    value: 'http://gb-sqlchatbot-service.gbsqlchatbot-test.svc.cluster.local'
+  - name: project.namespace
+    value: gbsqlchatbot-test
+  - name: runKondukto
+    value: false
+- ${{ if eq(variables['build.SourceBranchName'], 'dev') }}:
+  - group: hq-pipeline-dev
+  - name: apim.backendServiceUrl
+    value: 'http://gb-sqlchatbot-service.gbsqlchatbot-dev.svc.cluster.local'
+  - name: project.namespace
+    value: gbsqlchatbot-dev
+  - name: runKondukto
+    value: false

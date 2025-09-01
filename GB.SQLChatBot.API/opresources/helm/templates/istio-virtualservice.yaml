@@ -1,0 +1,24 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata: 
+  name: {{ include "gb-sqlchatbot-service.name" . }}
+  namespace: {{ .Values.istio.namespace }}
+spec: 
+  gateways: 
+  {{- range .Values.istio.virtualService.gateways }}
+    - {{ . }}
+  {{- end }}
+  hosts: 
+  {{- range .Values.istio.virtualService.hosts }}
+    - {{ . }}
+  {{- end }}
+  http: 
+    - match: 
+        - uri: 
+            prefix: {{ .Values.istio.virtualService.http.matchUriPrefix }}
+      rewrite: 
+        uri: /
+      route: 
+        {{- toYaml .Values.istio.virtualService.http.route | nindent 8 }}
+{{- end}}

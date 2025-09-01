@@ -1,0 +1,28 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+namespace: "gbsqlchatbot-dev"
+
+replicaCount: 1
+
+image:
+  tag: <TagPlaceholder>
+
+envVars: 
+  - name: ASPNETCORE_ENVIRONMENT
+    value: dev
+  - name: ServiceHost
+    value: gbsqlchatbot.dev.lcwaikiki.com
+
+istio:
+  enabled: true
+  namespace: gb-dev-shared
+  virtualService:
+    gateways: 
+    - gbgateway
+    hosts:
+    - gbsqlchatbot.dev.lcwaikiki.com
+    http:
+      matchUriPrefix: /gb/sqlchatbot/
+      route: 
+        - destination:
+            host: gb-sqlchatbot-service.gbsqlchatbot-dev.svc.cluster.local

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gb-sqlchatbot-service.name" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "gb-sqlchatbot-service.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort | default 8080 }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "gb-sqlchatbot-service.selectorLabels" . | nindent 4 }}

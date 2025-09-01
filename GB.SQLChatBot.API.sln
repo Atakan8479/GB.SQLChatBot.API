@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GB.SQLChatBot.API", "GB.SQLChatBot.API\GB.SQLChatBot.API.csproj", "{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB} = {7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GB.SQLChatBot.Business", "GB.SQLChatBot.Business\GB.SQLChatBot.Business.csproj", "{9B0B374B-4417-4CC2-BC3F-9669A601331B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GB.SQLChatBot.Data", "GB.SQLChatBot.Data\GB.SQLChatBot.Data.csproj", "{69DBE9FC-02E9-4DB9-B9C2-55BFCE5C75AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{0A67859F-F3E6-47A0-9832-FA7B5394DAAC}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GB.SQLChatBot.Core", "GB.SQLChatBot.Core\GB.SQLChatBot.Core.csproj", "{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0B374B-4417-4CC2-BC3F-9669A601331B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0B374B-4417-4CC2-BC3F-9669A601331B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0B374B-4417-4CC2-BC3F-9669A601331B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0B374B-4417-4CC2-BC3F-9669A601331B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69DBE9FC-02E9-4DB9-B9C2-55BFCE5C75AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69DBE9FC-02E9-4DB9-B9C2-55BFCE5C75AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69DBE9FC-02E9-4DB9-B9C2-55BFCE5C75AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69DBE9FC-02E9-4DB9-B9C2-55BFCE5C75AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B8896D2-EBFB-4B0F-A1E3-A2347C73DDBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6ECD58D2-D910-4ABF-B8A4-6B786711887E}
+	EndGlobalSection
+EndGlobal

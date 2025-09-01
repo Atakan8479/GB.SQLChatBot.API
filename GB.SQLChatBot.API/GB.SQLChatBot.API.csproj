@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+    <ProjectGuid>{A940D8EC-5E1E-4186-84DA-4D79EB7EA5AE}</ProjectGuid>
+    <UserSecretsId>3e57bcfc-17ff-4fef-ad40-0bb10d0de6f2</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyVersion>1.0.0.5</AssemblyVersion>
+    <IsPackable>true</IsPackable>
+    <Version>4.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="opresources\openshift\**" />
+    <Content Remove="opresources\openshift\**" />
+    <EmbeddedResource Remove="opresources\openshift\**" />
+    <None Remove="opresources\openshift\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
+    <PackageReference Include="Azure.Core" Version="1.47.1" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GB.SQLChatBot.Business\GB.SQLChatBot.Business.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.Integration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="certificate\lcwroot.crt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="certificate\lcwsubroot.crt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

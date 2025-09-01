@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Visual Studio / dotnet
+.vs/
+[Bb]in/
+[Oo]bj/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Logs
+*.log
+GB.SQLChatBot.API/certificate/
+*.csproj.user
+appsettings*.json
+*.key
+*.crt
+*.pfx
+*.pem

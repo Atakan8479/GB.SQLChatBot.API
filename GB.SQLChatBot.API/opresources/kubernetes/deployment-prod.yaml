@@ -1,0 +1,160 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "gb-sqlchatbot-service"
+  namespace: "gbsqlchatbot"
+  labels:
+    name: "gb-sqlchatbot-service"
+spec:
+  type: "ClusterIP"
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: "gb-sqlchatbot-service"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "gb-sqlchatbot-service"
+  namespace: "gbsqlchatbot"
+spec:
+  replicas: 6
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: "gb-sqlchatbot-service"
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'true'   
+      labels:
+        app: "gb-sqlchatbot-service"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker
+                operator: In
+                values:
+                - "true"
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: prod
+        - name: OTEL_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: SERVICE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ParsCore_ThreadPoolMinWorkerThreads
+          value: "200"
+        - name: ParsCore_ThreadPoolMinCompletionPortThreads
+          value: "200"
+        - name: StsOpenId__Authority
+          value: https://stslive.lcwaikiki.com/sts
+        - name: ServiceHost
+          valueFrom:
+            secretKeyRef:
+              key: ServiceHost
+              name: gbsqlchatbot-common
+        - name: ConfigSource
+          valueFrom:
+            secretKeyRef:
+              key: ConfigSource
+              name: gbsqlchatbot-common
+        - name: Logging__LogLevel__Default
+          value: Information
+        image: "mymharbor.lcwaikiki.local/gb/gb-sqlchatbot-service-dev:__DOCKERIMGVER__"
+        imagePullPolicy: Always
+        name: "gb-sqlchatbot-service"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe: # is the container healthy?
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+          initialDelaySeconds: 1
+        readinessProbe: # is the container ready to receive traffic?
+          httpGet:
+            port: 8080
+            path: /ping
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+          initialDelaySeconds: 1
+        startupProbe:
+          httpGet:
+            path: /startup/init
+            port: 8080
+            scheme: HTTP
+          successThreshold: 1
+          failureThreshold: 5
+          timeoutSeconds: 15
+          periodSeconds: 20
+        securityContext:
+          runAsUser: 2000
+          allowPrivilegeEscalation: false
+      imagePullSecrets:
+        - name: gbregistry
+      restartPolicy: Always
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata: 
+  name: gb-sqlchatbot-service
+  namespace: gb-shared
+spec: 
+  gateways: 
+    - gbgateway
+  hosts: 
+    - gbsqlchatbot.apis.live.lcwaikiki.com
+  http: 
+    - 
+      match: 
+        - 
+          uri: 
+            prefix: /gb/sqlchatbot/
+      rewrite: 
+        uri: /
+      route: 
+        - 
+          destination: 
+            host: gb-sqlchatbot-service.gbsqlchatbot.svc.cluster.local
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "gb-sqlchatbot-service"
+  namespace: "gbsqlchatbot"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "gb-sqlchatbot-service"
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 50

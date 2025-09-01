@@ -1,0 +1,89 @@
+name: $(Rev:r)
+
+resources:
+  repositories:
+  - repository: Templates
+    type: git
+    endpoint: TemplateRepositoryConnection
+    name: GitOps/Templates
+    ref: refs/heads/main
+  - repository: gb-apps-team
+    type: git
+    name: GitOps/gb-apps-team
+    endpoint: TeamRepositoryConnection
+    ref: refs/heads/master
+
+variables:
+- template: variables.yaml
+
+trigger:
+- none
+
+stages:
+- stage: 
+  displayName: Build
+  jobs:
+  - job:
+    displayName: Build
+    pool:
+      name: UbuntuDocker
+    steps:
+    - template: BuildTemplate_v3.yaml@Templates
+      parameters:
+        containerRegistryServiceConnection: $(registry.serviceConnection)
+        harborpassword: $(registry.password)
+        harborrepo: $(registry.chartRepoName)
+        harborrepoURL: $(registry.chartRepoUrl)
+        harborusername: $(registry.username)
+        imageRepoUrl: $(registry.imageRepoUrl)
+        projectName: $(project.folder)
+        runTest: false
+        runSonarqube: false
+        runKondukto: ${{ variables.runKondukto }}
+        serviceName: $(project.serviceName)
+        sonarQube: $(project.sonarqubeEndpoint)
+        sonarQubeProjectKey: $(project.sonarqubeProjectKey)
+        teamName: $(project.teamName)
+        Env: $(pipeline.environment)
+
+- stage: 
+  displayName: Apim    
+  jobs:
+  - job:
+    displayName: Apim
+    pool:
+      name: Default
+    steps:
+    - template: HqApimTemplate.yaml@Templates
+      parameters:
+        skipApim: false
+        API_BACKEND_SERVICE_URL: $(apim.backendServiceUrl)
+        API_DESCRIPTION: $(apim.apiDescription)
+        API_DISPLAY_NAME: $(apim.apiDisplayName)
+        API_FORMAT: $(apim.apiFormat)
+        API_GATEWAY: $(apim.apiGateway)
+        API_HQ_GATEWAY: $(hqapim.apiGateway)
+        API_ID: $(apim.apiId)
+        API_PATH: $(apim.apiPath)
+        API_PRODUCT_ID: $(apim.apiProductId)
+        APIM_RESOURCE_GROUP: $(apim.resourceGroup)
+        APIM_SERVICE_NAME: $(apim.serviceName)
+        APIM_SUBSCRIPTION_ID: $(apim.subscriptionId)
+        ApimServiceConnection: $(apim.serviceConnection)
+        projectName: $(project.folder)
+
+- stage:
+  displayName: Deploy    
+  jobs:
+  - job:
+    displayName: Deploy
+    pool:
+      name: UbuntuDocker
+    steps:
+    - template: DeployTemplate.yaml@Templates
+      parameters:
+        GitopsRepoName: '{{GitOpsTeamRepository}}'
+        Env: $(pipeline.environment)
+        Branch: master
+        AppName: $(project.serviceName)
+        Namespace: $(project.namespace)
